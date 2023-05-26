@@ -1,3 +1,4 @@
+"""Python file to serve as the frontend"""
 import streamlit as st
 import os
 from streamlit_chat import message
@@ -27,7 +28,7 @@ st.set_page_config(page_title="Bot GPT", page_icon=":robot:")
 # From here down is all the Streamlit UI.
 st.header("Bot - GPT")
 
-os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key', label="Enter Your Key", value=st.secrets["api"], type="password")
+os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
 
 def load_chain(selected_option):
     from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
@@ -66,26 +67,15 @@ if "generated" not in st.session_state:
 if "past" not in st.session_state:
     st.session_state["past"] = []
 
-if "selected_option" not in st.session_state:
-    st.session_state["selected_option"] = None
-
 placeholder = st.empty()
 
 form = st.form("my_form")
 
 options = ["Lawyer Bot", "Educator Bot"]
-
-if st.session_state["selected_option"] is None:
-    selected_option = form.selectbox("Select an option", options)
-    st.session_state["selected_option"] = selected_option
-else:
-    selected_option = st.session_state["selected_option"]
-    form.write("Selected option: " + selected_option)
+selected_option = form.selectbox("Select an option", options)
 
 if selected_option:
     chain = load_chain(selected_option)
-    # Remove the dropdown from the form
-    form.empty()
 
 user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
 submitted_flag = form.form_submit_button()
