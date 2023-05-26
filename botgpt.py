@@ -80,20 +80,28 @@ if selected_option:
     submitted_flag = form.form_submit_button()
     form.empty()  # Clear the form after submission
 
-    if submitted_flag:
-        with placeholder.container():
-            if user_input:
-                output = execute_query(user_input)
-                st.session_state.past.append(user_input)
-                st.session_state.generated.append(output.get('text'))
+if submitted_flag:
+    with placeholder.container():
+        if user_input:
+            output = execute_query(user_input)
+            st.session_state.past.append(user_input)
+            st.session_state.generated.append(output.get('text'))
 
-            if st.session_state["generated"]:
-                for i in range(len(st.session_state["generated"])):
-                    st.text(st.session_state["past"][i])
-                    st.text(st.session_state["generated"][i])
-else:
-    user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
-    submitted_flag = form.form_submit_button()
-    if submitted_flag:
-        # Handle the input without the chain
-        pass
+        if st.session_state["generated"]:
+            for i in range(0, len(st.session_state["generated"]), 1):
+                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+                message(st.session_state["generated"][i], key=str(i))
+user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
+submitted_flag = form.form_submit_button()
+
+if submitted_flag:
+    with placeholder.container():
+        if user_input:
+            output = execute_query(user_input)
+            st.session_state.past.append(user_input)
+            st.session_state.generated.append(output.get('text'))
+
+        if st.session_state["generated"]:
+            for i in range(0, len(st.session_state["generated"]), 1):
+                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+                message(st.session_state["generated"][i], key=str(i))
