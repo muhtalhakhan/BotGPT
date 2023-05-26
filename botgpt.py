@@ -72,24 +72,28 @@ placeholder = st.empty()
 form = st.form("my_form")
 
 options = ["Lawyer Bot", "Educator Bot"]
-selected_option = form.selectbox("Select an option", options)
+selected_option = form.selectbox("Select an option", options, key="select_option")
 
 if selected_option:
     chain = load_chain(selected_option)
-    user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
+    user_input = form.text_input("You:", "Hi, How can I learn from you?", key="text_input")
     submitted_flag = form.form_submit_button()
     form.empty()  # Clear the form after submission
 
 if submitted_flag:
-    with placeholder.container():
-        if user_input:
-            output = execute_query(user_input)
-            st.session_state.past.append(user_input)
-            st.session_state.generated.append(output.get('text'))
+        with placeholder.container():
+            if user_input:
+                output = execute_query(user_input)
+                st.session_state.past.append(user_input)
+                st.session_state.generated.append(output.get('text'))
 
-        if st.session_state["generated"]:
-            for i in range(0, len(st.session_state["generated"]), 1):
-                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
-                message(st.session_state["generated"][i], key=str(i))
-user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
-submitted_flag = form.form_submit_button()
+            if st.session_state["generated"]:
+                for i in range(len(st.session_state["generated"])):
+                    st.text(st.session_state["past"][i])
+                    st.text(st.session_state["generated"][i])
+else:
+    user_input = form.text_input("You:", "Hi, How can I learn from you?", key="text_input")
+    submitted_flag = form.form_submit_button()
+    if submitted_flag:
+        # Handle the input without the chain
+        pass
