@@ -23,7 +23,7 @@ def completions_with_backoff(**kwargs):
     response = OpenAI.Completion.create(**kwargs)
     return response
 
-st.set_page_config(page_title="Tutor Bot", page_icon=":robot:")
+st.set_page_config(page_title="Bot GPT", page_icon=":robot:")
 
 # From here down is all the Streamlit UI.
 st.header("Bot - GPT")
