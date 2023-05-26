@@ -9,8 +9,8 @@ from langchain.memory import ConversationBufferWindowMemory
 from openai.error import RateLimitError
 import backoff
 
-file_path = "/LawyerBot.txt"
-file_path1 = "/educator_bot.txt"
+file_path = "../LawyerBot.txt"
+file_path1 = "../educator_bot.txt"
 
 with open(file_path, "r") as file:
     # Read the contents of the file
