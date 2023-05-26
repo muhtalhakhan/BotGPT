@@ -53,6 +53,7 @@ def load_chain(selected_option):
 
     return chain
 
+
 @backoff.on_exception(backoff.expo, RateLimitError, max_time=60)
 def execute_query(query):
     output = chain(query)
