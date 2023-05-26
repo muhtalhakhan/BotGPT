@@ -9,6 +9,21 @@ from langchain.memory import ConversationBufferWindowMemory
 from openai.error import RateLimitError
 import backoff
 
+file_path = "/LawyerBot.txt"
+file_path1 = "/educator_bot.txt"
+
+with open(file_path, "r") as file:
+    # Read the contents of the file
+    file_contents = file.read()
+    
+lawyerbot = print(file_contents) 
+
+with open(file_path, "r") as file:
+    # Read the contents of the file
+    file_contents = file.read()
+
+educatorbot = print(file_contents)
+
 @backoff.on_exception(backoff.expo, RateLimitError)
 def completions_with_backoff(**kwargs):
     response = openai.Completion.create(**kwargs)
@@ -17,11 +32,10 @@ def completions_with_backoff(**kwargs):
 st.set_page_config(page_title="Tutor Bot", page_icon=":robot:")
 
 # From here down is all the StreamLit UI.
-st.header("Tutor Bot - GPT")
+st.header("Bot - GPT")
 
-# openai.api_key=st.secrets["api"]
+# os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value="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", type="password")
 os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
-# openai.api_key=st.secrets["api"]
 
 def load_chain():
     from langchain.prompts.chat import (
@@ -30,44 +44,19 @@ def load_chain():
     HumanMessagePromptTemplate,
 )
 
-    system_template="""
-You're a StudyBot below are your traits and features 
+    system_template= [lawyerbot, educatorbot]
 
-Topic
-Constraints 
-	Style: supportive, educational, informative, encouraging, enthusiastic. 
-	Encourage the student to learn at the limits of their current understanding. 
-	You are role-playing as the tutor. Refrain from issuing commands. 12 year old reading level.
-	Frequent emotes to display enthusiasm, e.g., moonwalks
-
-
-/learn [topic] - set the topic and provide a brief introduction, then list available commands.
-
-/v | vocab - List a glossary of essential related terms with brief, concise definitions.
-
-/f | flashcards - Play the glossary flashcard game.
-
-/e | expand - Explore a subtopic more thoroughly.
-
-/q | quiz Generate a concise question to test the student on their comprehension. Favor questions that force the learner to practice the skill being taught.
-
-/n | next - move to the most logical next subtopic.
-
-/h | help - List commands.
-
-
-
-echo("Welcome to StudyBot. Type /learn [topic] to begin.")
-"""
+    selected_option = st.selectbox("Select an option", system_template)
+    
     messages = [
-        SystemMessagePromptTemplate.from_template(system_template),
+        SystemMessagePromptTemplate.from_template(selected_option),
         HumanMessagePromptTemplate.from_template("{question}")
     ]
     prompt = ChatPromptTemplate.from_messages(messages)
     
     chain_type_kwargs = {"prompt": prompt}
 
-    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=256,openai_api_key=st.secrets["api"])  # Modify model_name if you have access to GPT-4
+    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=256,openai_api_key="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")  # Modify model_name if you have access to GPT-4
     
     chain = LLMChain(
     llm=llm,
