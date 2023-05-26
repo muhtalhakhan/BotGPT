@@ -27,7 +27,7 @@ st.set_page_config(page_title="Bot GPT", page_icon=":robot:")
 # From here down is all the Streamlit UI.
 st.header("Bot - GPT")
 
-os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key', label="Enter Your Key", value=st.secrets["api"], type="password")
+os.environ["OPENAI_API_KEY"] = st.text_input(key='OpenAI_Key', label="Enter Your Key", value=st.secrets["api"], type="password")
 
 def load_chain(selected_option):
     from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
@@ -98,6 +98,31 @@ if submitted_flag:
             st.session_state.generated.append(output.get('text'))
 
         if st.session_state["generated"]:
-            for i in range(0, len(st.session_state["generated"]), 1):
+            for i in range(len(st.session_state["generated"])):
                 message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
                 message(st.session_state["generated"][i], key=str(i))
+        
+        # Clear the text input after submitting
+        st.session_state["input"] = ""
+
+# Clear the text input after each message
+if "input" not in st.session_state:
+    st.session_state["input"] = ""
+
+user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input", value=st.session_state["input"])
+submitted_flag = form.form_submit_button()
+
+if submitted_flag:
+    with placeholder.container():
+        if user_input:
+            output = execute_query(user_input)
+            st.session_state.past.append(user_input)
+            st.session_state.generated.append(output.get('text'))
+
+        if st.session_state["generated"]:
+            for i in range(len(st.session_state["generated"])):
+                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+                message(st.session_state["generated"][i], key=str(i))
+        
+        # Clear the text input after submitting
+        st.session_state["input"] = ""
