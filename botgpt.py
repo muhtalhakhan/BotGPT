@@ -93,15 +93,3 @@ if submitted_flag:
                 message(st.session_state["generated"][i], key=str(i))
 user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
 submitted_flag = form.form_submit_button()
-
-if submitted_flag:
-    with placeholder.container():
-        if user_input:
-            output = execute_query(user_input)
-            st.session_state.past.append(user_input)
-            st.session_state.generated.append(output.get('text'))
-
-        if st.session_state["generated"]:
-            for i in range(0, len(st.session_state["generated"]), 1):
-                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
-                message(st.session_state["generated"][i], key=str(i))
