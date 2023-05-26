@@ -28,7 +28,7 @@ st.set_page_config(page_title="Tutor Bot", page_icon=":robot:")
 # From here down is all the Streamlit UI.
 st.header("Bot - GPT")
 
-os.environ["OPENAI_API_KEY"] = st.text_input(key='OpenAI_Key', label="Enter Your Key", value="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", type="password")
+os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
 
 def load_chain(selected_option):
     from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
