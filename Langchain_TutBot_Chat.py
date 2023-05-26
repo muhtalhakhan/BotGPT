@@ -19,7 +19,8 @@ st.set_page_config(page_title="Tutor Bot", page_icon=":robot:")
 # From here down is all the StreamLit UI.
 st.header("Tutor Bot - GPT")
 
-os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',, value=st.secrets["api"], type="password")
+openai.api_key=st.secrets["api"]
+# os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
 # openai.api_key=st.secrets["api"]
 
 def load_chain():
