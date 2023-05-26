@@ -19,7 +19,7 @@ st.set_page_config(page_title="Tutor Bot", page_icon=":robot:")
 # From here down is all the StreamLit UI.
 st.header("Tutor Bot - GPT")
 
-os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=user_api_key, type="password")
+os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["user_api_key"], type="password")
 
 def load_chain():
     from langchain.prompts.chat import (
@@ -65,7 +65,7 @@ echo("Welcome to StudyBot. Type /learn [topic] to begin.")
     
     chain_type_kwargs = {"prompt": prompt}
 
-    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=256,openai_api_key=user_api_key)  # Modify model_name if you have access to GPT-4
+    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=256,openai_api_key=st.secrets["user_api_key"])  # Modify model_name if you have access to GPT-4
     
     chain = LLMChain(
     llm=llm,
