@@ -66,12 +66,21 @@ if "generated" not in st.session_state:
 if "past" not in st.session_state:
     st.session_state["past"] = []
 
+if "selected_option" not in st.session_state:
+    st.session_state["selected_option"] = None
+
 placeholder = st.empty()
 
 form = st.form("my_form")
 
 options = ["Lawyer Bot", "Educator Bot"]
-selected_option = form.selectbox("Select an option", options)
+
+if st.session_state["selected_option"] is None:
+    selected_option = form.selectbox("Select an option", options)
+    st.session_state["selected_option"] = selected_option
+else:
+    selected_option = st.session_state["selected_option"]
+    form.write("Selected option: " + selected_option)
 
 if selected_option:
     chain = load_chain(selected_option)
