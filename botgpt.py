@@ -5,6 +5,7 @@ from langchain import OpenAI, ConversationChain, LLMChain, PromptTemplate
 from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from openai.error import RateLimitError
 import backoff
+import openai
 
 file_path_lawyerbot = "LawyerBot.txt"
 file_path_educatorbot = "educator_bot.txt"
