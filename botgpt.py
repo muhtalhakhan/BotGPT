@@ -1,11 +1,8 @@
-"""Python file to serve as the frontend"""
 import streamlit as st
 import os
 from streamlit_chat import message
-import openai
 from langchain import OpenAI, ConversationChain, LLMChain, PromptTemplate
-from langchain.memory import ConversationBufferWindowMemory
-
+from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from openai.error import RateLimitError
 import backoff
 
@@ -28,12 +25,9 @@ st.set_page_config(page_title="Bot GPT", page_icon=":robot:")
 # From here down is all the Streamlit UI.
 st.header("Bot - GPT")
 
-openai.api_key = st.text_input('API-KEY',type='password')
-# os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
+openai.api_key = st.text_input('API-KEY', type='password')
 
 def load_chain(selected_option):
-    from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
-
     system_templates = {
         "Lawyer Bot": lawyerbot,
         "Educator Bot": educatorbot
@@ -68,27 +62,32 @@ if "generated" not in st.session_state:
 if "past" not in st.session_state:
     st.session_state["past"] = []
 
-placeholder = st.empty()
-
 form = st.form("my_form")
 
 options = ["Lawyer Bot", "Educator Bot"]
 selected_option = form.selectbox("Select an option", options)
+submit_button = form.form_submit_button("Submit")
 
-if selected_option:
+if selected_option and submit_button:
     chain = load_chain(selected_option)
+    show_textbox = True
+else:
+    show_textbox = False
 
-user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
-submitted_flag = form.form_submit_button()
+if show_textbox:
+    user_input = form.text_input("You:", "Hi, How can I learn from you?", key="input")
+    submitted_flag = form.form_submit_button("Submit")
 
-if submitted_flag:
-    with placeholder.container():
-        if user_input:
-            output = execute_query(user_input)
-            st.session_state.past.append(user_input)
-            st.session_state.generated.append(output.get('text'))
+    if submitted_flag:
+        with st.container():
+            if user_input:
+                output = execute_query(user_input)
+                st.session_state.past.append(user_input)
+                st.session_state.generated.append(output.get('text'))
 
-        if st.session_state["generated"]:
-            for i in range(0, len(st.session_state["generated"]), 1):
-                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
-                message(st.session_state["generated"][i], key=str(i))
+            if st.session_state["generated"]:
+                for i in range(0, len(st.session_state["generated"]), 1):
+                    message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+                    message(st.session_state["generated"][i], key=str(i))
+
+# ...
