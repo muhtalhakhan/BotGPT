@@ -49,7 +49,7 @@ def load_chain(selected_option):
 
     chain_type_kwargs = {"prompt": prompt}
 
-    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=256, openai_api_key=os.environ["OPENAI_API_KEY"])  # Modify model_name if you have access to GPT-4
+    llm = OpenAI(model_name="gpt-4", temperature=0, max_tokens=256, openai_api_key=os.environ["OPENAI_API_KEY"])  # Modify model_name if you have access to GPT-4
 
     chain = LLMChain(llm=llm, verbose=True, **chain_type_kwargs)
 
