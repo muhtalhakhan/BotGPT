@@ -28,7 +28,7 @@ st.set_page_config(page_title="Bot GPT", page_icon=":robot:")
 # From here down is all the Streamlit UI.
 st.header("Bot - GPT")
 
-openai.api_key = st.text_input('OPENAI_API_KEY',type='password')
+openai.api_key = st.text_input('API-KEY',type='password')
 # os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
 
 def load_chain(selected_option):
