@@ -2,7 +2,7 @@
 import streamlit as st
 import os
 from streamlit_chat import message
-
+import openai
 from langchain import OpenAI, ConversationChain, LLMChain, PromptTemplate
 from langchain.memory import ConversationBufferWindowMemory
 
@@ -29,7 +29,6 @@ st.set_page_config(page_title="Bot GPT", page_icon=":robot:")
 st.header("Bot - GPT")
 
 openai.api_key = st.text_input('OPENAI_API_KEY',type='password')
-os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=openai.api_key, type="password")
 # os.environ["OPENAI_API_KEY"]=st.text_input(key='OpenAI_Key',label="Enter Your Key", value=st.secrets["api"], type="password")
 
 def load_chain(selected_option):
